@@ -5,10 +5,7 @@ import type {
   ListCategoriesResponse,
 } from "@/types/medusa";
 
-const BASE_URL = import.meta.env.DEV
-  ? ""
-  : import.meta.env.VITE_MEDUSA_BACKEND_URL ||
-    "https://apple-things-server.onrender.com";
+const BASE_URL = "";
 const PUBLISHABLE_KEY =
   import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY ||
   "pk_4f49ee70d0ba748fbf79dd855c5e8c8574e20d7d6f9a7b4047ead3832236259c";
