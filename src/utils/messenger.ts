@@ -41,7 +41,7 @@ export function generateTelegramOrderLink(params: OrderMessageParams): string {
   const message = buildOrderMessage(params);
   if (isConfigured(TELEGRAM_USERNAME)) {
     const username = TELEGRAM_USERNAME.replace(/^@/, "");
-    return `https://t.me/share/url?url=https://t.me/${username}&text=${encodeURIComponent(message)}`;
+    return `https://t.me/${username}?text=${encodeURIComponent(message)}`;
   }
-  return `https://t.me/share/url?url=${encodeURIComponent(params.productUrl)}&text=${encodeURIComponent(message)}`;
+  return `https://t.me/share/url?text=${encodeURIComponent(message)}`;
 }
