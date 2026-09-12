@@ -1,8 +1,10 @@
-import { Send, Phone } from "lucide-react";
+import { useState } from "react";
+import { Send, Phone, Check } from "lucide-react";
 import {
   generateTiktokOrderLink,
   generateViberOrderLink,
   generateTelegramOrderLink,
+  getTiktokOrderMessage,
 } from "@/utils/messenger";
 import { formatMmk } from "@/lib/medusa";
 import type { MedusaProduct } from "@/types/medusa";
@@ -25,6 +27,8 @@ export default function ChatOrderButtons({
   product,
   selectedOptions,
 }: ChatOrderButtonsProps) {
+  const [copied, setCopied] = useState(false);
+
   const selectedVariant = resolveSelectedVariant(product, selectedOptions);
   const variantPrice = selectedVariant
     ? product.variants?.find((v) => v.id === selectedVariant.id)
@@ -43,6 +47,19 @@ export default function ChatOrderButtons({
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
+  const handleTiktok = () => {
+    const msg = getTiktokOrderMessage(orderParams);
+    navigator.clipboard.writeText(msg).then(() => {
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+        openLink(generateTiktokOrderLink(orderParams));
+      }, 2000);
+    }).catch(() => {
+      openLink(generateTiktokOrderLink(orderParams));
+    });
+  };
+
   const platforms = [
     {
       key: "tiktok",
@@ -50,7 +67,7 @@ export default function ChatOrderButtons({
       icon: TikTokIcon,
       color: "#000000",
       shadow: "0 4px 20px rgba(0,0,0,0.25)",
-      onClick: () => openLink(generateTiktokOrderLink(orderParams)),
+      onClick: handleTiktok,
     },
     {
       key: "viber",
@@ -71,7 +88,36 @@ export default function ChatOrderButtons({
   ];
 
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      {copied && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: 100,
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#000000",
+            color: "#ffffff",
+            fontSize: 13,
+            fontWeight: 500,
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderRadius: 12,
+            whiteSpace: "nowrap",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+            zIndex: 100,
+            animation: "fadeIn 0.2s ease",
+          }}
+        >
+          <Check size={14} />
+          Order message copied — please paste in TikTok chat to complete your order.  
+        </div>
+      )}
       <p
         style={{
           marginBottom: 12,

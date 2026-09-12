@@ -56,6 +56,10 @@ export default function ProductDetailPage() {
     return getVariantPrice(product, selectedVariant.id);
   }, [product, selectedVariant]);
 
+  const allOptionsSelected = product?.options?.every(
+    (opt) => selectedOptions[opt.id]
+  ) ?? false;
+
   const handleOptionSelect = (optionId: string, valueId: string) => {
     setSelectedOptions((prev) => ({ ...prev, [optionId]: valueId }));
   };
@@ -227,7 +231,33 @@ export default function ProductDetailPage() {
               product={product}
               selectedOptions={selectedOptions}
               onOptionSelect={handleOptionSelect}
+              showStock={allOptionsSelected}
             />
+
+            {allOptionsSelected && selectedVariant && (
+              <div style={{ marginTop: 16 }}>
+                {selectedVariant.inventory_quantity > 0 ? (
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color:
+                        selectedVariant.inventory_quantity <= 5
+                          ? "#d63384"
+                          : "#22c55e",
+                    }}
+                  >
+                    {selectedVariant.inventory_quantity <= 5
+                      ? `Only ${selectedVariant.inventory_quantity} left in stock`
+                      : `${selectedVariant.inventory_quantity} in stock`}
+                  </p>
+                ) : (
+                  <p style={{ fontSize: 13, fontWeight: 500, color: "#dc2626" }}>
+                    Out of stock
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

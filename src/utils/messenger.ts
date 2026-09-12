@@ -20,13 +20,16 @@ function buildOrderMessage(params: OrderMessageParams): string {
 - Link: ${params.productUrl}`;
 }
 
-export function generateTiktokOrderLink(params: OrderMessageParams): string {
-  const message = buildOrderMessage(params);
+export function generateTiktokOrderLink(_params: OrderMessageParams): string {
   if (isConfigured(TIKTOK_USERNAME)) {
     const username = TIKTOK_USERNAME.replace(/^@/, "");
-    return `https://www.tiktok.com/@${username}?lang=en`;
+    return `https://www.tiktok.com/@${username}`;
   }
   return `https://www.tiktok.com`;
+}
+
+export function getTiktokOrderMessage(params: OrderMessageParams): string {
+  return buildOrderMessage(params);
 }
 
 export function generateViberOrderLink(params: OrderMessageParams): string {

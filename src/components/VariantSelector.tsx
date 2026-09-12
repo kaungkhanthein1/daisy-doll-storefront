@@ -1,6 +1,7 @@
 import type {
   MedusaProduct,
   MedusaProductOption,
+  MedusaProductOptionValue,
   MedusaProductVariant,
 } from "@/types/medusa";
 
@@ -8,12 +9,14 @@ interface VariantSelectorProps {
   product: MedusaProduct;
   selectedOptions: Record<string, string>;
   onOptionSelect: (optionId: string, valueId: string) => void;
+  showStock?: boolean;
 }
 
 export default function VariantSelector({
   product,
   selectedOptions,
   onOptionSelect,
+  showStock = false,
 }: VariantSelectorProps) {
   if (!product.options || product.options.length === 0) return null;
 
@@ -36,15 +39,18 @@ export default function VariantSelector({
             {option.title}
           </p>
           <div className="flex flex-wrap" style={{ gap: 10 }}>
-            {option.values.map((val) => {
+            {option.values.map((val: MedusaProductOptionValue) => {
               const isSelected = selectedOptions[option.id] === val.id;
+
               return (
                 <button
                   key={val.id}
                   onClick={() => onOptionSelect(option.id, val.id)}
                   style={{
                     borderRadius: 9999,
-                    border: `1.5px solid ${isSelected ? "#d63384" : "#cccccc"}`,
+                    border: `1.5px solid ${
+                      isSelected ? "#d63384" : "#cccccc"
+                    }`,
                     backgroundColor: isSelected ? "#fdf2f8" : "#f9f9f9",
                     paddingLeft: 20,
                     paddingRight: 20,
