@@ -39,9 +39,9 @@ export function generateViberOrderLink(params: OrderMessageParams): string {
 
 export function generateTelegramOrderLink(params: OrderMessageParams): string {
   const message = buildOrderMessage(params);
-  // Requires the shop's public Telegram username (set VITE_TELEGRAM_USERNAME).
   if (isConfigured(TELEGRAM_USERNAME)) {
-    return `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+    const username = TELEGRAM_USERNAME.replace(/^@/, "");
+    return `https://t.me/share/url?url=https://t.me/${username}&text=${encodeURIComponent(message)}`;
   }
   return `https://t.me/share/url?url=${encodeURIComponent(params.productUrl)}&text=${encodeURIComponent(message)}`;
 }
