@@ -1,12 +1,20 @@
-import { MessageCircle, Send, Phone } from "lucide-react";
+import { Send, Phone } from "lucide-react";
 import {
-  generateMessengerOrderLink,
+  generateTiktokOrderLink,
   generateViberOrderLink,
   generateTelegramOrderLink,
 } from "@/utils/messenger";
 import { formatMmk } from "@/lib/medusa";
 import type { MedusaProduct } from "@/types/medusa";
 import { resolveSelectedVariant } from "@/components/VariantSelector";
+
+function TikTokIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.43V13.2a8.19 8.19 0 005.58 2.17v-3.45a4.85 4.85 0 01-5.58-2.76V6.69h5.58z" />
+    </svg>
+  );
+}
 
 interface ChatOrderButtonsProps {
   product: MedusaProduct;
@@ -37,12 +45,12 @@ export default function ChatOrderButtons({
 
   const platforms = [
     {
-      key: "messenger",
-      label: "Messenger",
-      icon: MessageCircle,
-      color: "#0084FF",
-      shadow: "0 4px 20px rgba(0,132,255,0.35)",
-      onClick: () => openLink(generateMessengerOrderLink(orderParams)),
+      key: "tiktok",
+      label: "TikTok",
+      icon: TikTokIcon,
+      color: "#000000",
+      shadow: "0 4px 20px rgba(0,0,0,0.25)",
+      onClick: () => openLink(generateTiktokOrderLink(orderParams)),
     },
     {
       key: "viber",
@@ -83,7 +91,9 @@ export default function ChatOrderButtons({
             onClick={onClick}
             className="flex flex-1 items-center justify-center"
             style={{
-              background: `linear-gradient(145deg, ${color}, ${color}cc)`,
+              background: key === "tiktok"
+                ? "linear-gradient(145deg, #000000, #333333)"
+                : `linear-gradient(145deg, ${color}, ${color}cc)`,
               borderRadius: 14,
               paddingTop: 13,
               paddingBottom: 13,
@@ -97,7 +107,7 @@ export default function ChatOrderButtons({
               textShadow: "0 1px 2px rgba(0,0,0,0.15)",
             }}
           >
-            <Icon size={17} strokeWidth={2.3} />
+            <Icon size={17} />
             {label}
           </button>
         ))}

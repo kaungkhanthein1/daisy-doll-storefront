@@ -1,9 +1,7 @@
-const MESSENGER_PAGE_ID =
-  import.meta.env.VITE_MESSENGER_PAGE_ID || "YOUR_PAGE_ID";
 const VIBER_PA_URI = import.meta.env.VITE_VIBER_URI || "";
 const TELEGRAM_USERNAME = import.meta.env.VITE_TELEGRAM_USERNAME || "";
+const TIKTOK_USERNAME = import.meta.env.VITE_TIKTOK_USERNAME || "";
 
-// Placeholder env values haven't been replaced with real account info yet.
 const isConfigured = (value: string) =>
   value.length > 0 && !value.startsWith("YOUR_");
 
@@ -22,15 +20,17 @@ function buildOrderMessage(params: OrderMessageParams): string {
 - Link: ${params.productUrl}`;
 }
 
-export function generateMessengerOrderLink(params: OrderMessageParams): string {
+export function generateTiktokOrderLink(params: OrderMessageParams): string {
   const message = buildOrderMessage(params);
-  return `https://m.me/${MESSENGER_PAGE_ID}?text=${encodeURIComponent(message)}`;
+  if (isConfigured(TIKTOK_USERNAME)) {
+    const username = TIKTOK_USERNAME.replace(/^@/, "");
+    return `https://www.tiktok.com/@${username}?lang=en`;
+  }
+  return `https://www.tiktok.com`;
 }
 
 export function generateViberOrderLink(params: OrderMessageParams): string {
   const message = buildOrderMessage(params);
-  // Requires a Viber Public Account URI (set VITE_VIBER_URI).
-  // Falls back to Viber's share sheet so the user can pick the shop's chat manually.
   if (isConfigured(VIBER_PA_URI)) {
     return `viber://pa?chatURI=${VIBER_PA_URI}&text=${encodeURIComponent(message)}`;
   }
